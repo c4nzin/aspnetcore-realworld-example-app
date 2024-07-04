@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Conduit.Features.Profiles;
 
+//ok
+
 public class ProfileReader(
     ConduitContext context,
     ICurrentUserAccessor currentUserAccessor,
@@ -30,10 +32,6 @@ public class ProfileReader(
             throw new RestException(HttpStatusCode.NotFound, new { User = Constants.NOT_FOUND });
         }
 
-        if (person == null)
-        {
-            throw new RestException(HttpStatusCode.NotFound, new { User = Constants.NOT_FOUND });
-        }
         var profile = mapper.Map<Domain.Person, Profile>(person);
 
         if (currentUserName != null)
@@ -43,7 +41,7 @@ public class ProfileReader(
                 .Include(x => x.Followers)
                 .FirstOrDefaultAsync(x => x.Username == currentUserName, cancellationToken);
 
-            if (currentPerson is null)
+            if (currentPerson == null)
             {
                 throw new RestException(
                     HttpStatusCode.NotFound,

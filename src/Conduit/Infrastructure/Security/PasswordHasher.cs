@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Conduit.Infrastructure.Security;
 
+//tamam
 public class PasswordHasher : IPasswordHasher
 {
     private readonly HMACSHA512 x = new(Encoding.UTF8.GetBytes("realworld"));

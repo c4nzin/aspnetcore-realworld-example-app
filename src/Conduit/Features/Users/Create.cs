@@ -12,6 +12,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
+//ok
+
 namespace Conduit.Features.Users;
 
 public class Create
@@ -39,11 +41,10 @@ public class Create
     {
         public async Task<UserEnvelope> Handle(Command message, CancellationToken cancellationToken)
         {
-            if (
-                await context
-                    .Persons.Where(x => x.Username == message.User.Username)
-                    .AnyAsync(cancellationToken)
-            )
+            var userExists = await context
+                .Persons.Where(x => x.Username == message.User.Username)
+                .AnyAsync(cancellationToken);
+            if (userExists)
             {
                 throw new RestException(
                     HttpStatusCode.BadRequest,

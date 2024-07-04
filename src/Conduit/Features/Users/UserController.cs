@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Conduit.Features.Users;
 
+//ok
+
 [Route("user")]
 [Authorize(AuthenticationSchemes = JwtIssuerOptions.Schemes)]
 public class UserController(IMediator mediator, ICurrentUserAccessor currentUserAccessor)

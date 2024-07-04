@@ -36,9 +36,9 @@ public static class ServicesExtensions
 
         services.AddAutoMapper(typeof(Program));
 
-        services.AddScoped<IPasswordHasher, PasswordHasher>();
-        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>(); //OK
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>(); //OK
+        services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>(); //OK
         services.AddScoped<IProfileReader, ProfileReader>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     }

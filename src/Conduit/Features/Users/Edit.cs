@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -15,6 +16,8 @@ namespace Conduit.Features.Users;
 
 public class Edit
 {
+    private static RandomNumberGenerator _randomNumberGenerator = RandomNumberGenerator.Create();
+
     public class UserData
     {
         public string? Username { get; set; }
@@ -32,7 +35,7 @@ public class Edit
 
     public class CommandValidator : AbstractValidator<Command>
     {
-        public CommandValidator() => RuleFor(x => x.User).NotNull();
+        public CommandValidator() => RuleFor(x => x.User).NotNull().NotEmpty();
     }
 
     public class Handler(
@@ -45,25 +48,26 @@ public class Edit
         public async Task<UserEnvelope> Handle(Command message, CancellationToken cancellationToken)
         {
             var currentUsername = currentUserAccessor.GetCurrentUsername();
-            var person = await context
-                .Persons.Where(x => x.Username == currentUsername)
-                .FirstOrDefaultAsync(cancellationToken);
-            if (person is null)
-            {
-                throw new RestException(
+            var person =
+                await context
+                    .Persons.Where(x => x.Username == currentUsername)
+                    .FirstOrDefaultAsync(cancellationToken)
+                ?? throw new RestException(
                     HttpStatusCode.NotFound,
                     new { User = Constants.NOT_FOUND }
                 );
-            }
 
-            person.Username = message.User.Username ?? person.Username;
-            person.Email = message.User.Email ?? person.Email;
-            person.Bio = message.User.Bio ?? person.Bio;
-            person.Image = message.User.Image ?? person.Image;
+            // person.Username = message.User.Username ?? person.Username;
+            // person.Email = message.User.Email ?? person.Email;
+            // person.Bio = message.User.Bio ?? person.Bio;
+            // person.Image = message.User.Image ?? person.Image;
+
+            mapper.Map<User>(person);
 
             if (!string.IsNullOrWhiteSpace(message.User.Password))
             {
-                var salt = Guid.NewGuid().ToByteArray();
+                var salt = new byte[32];
+                _randomNumberGenerator.GetBytes(salt);
                 person.Hash = await passwordHasher.Hash(message.User.Password, salt);
                 person.Salt = salt;
             }

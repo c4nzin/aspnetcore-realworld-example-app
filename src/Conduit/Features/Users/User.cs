@@ -1,5 +1,6 @@
 namespace Conduit.Features.Users;
 
+//ok
 public class User
 {
     public string? Username { get; init; }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Conduit.Infrastructure.Security;
 
+//OKEY
 public class JwtTokenGenerator(IOptions<JwtIssuerOptions> jwtOptions) : IJwtTokenGenerator
 {
     private readonly JwtIssuerOptions _jwtOptions = jwtOptions.Value;
