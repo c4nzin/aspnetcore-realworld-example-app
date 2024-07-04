@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Conduit.Features.Profiles;
 
+//ok
 //ok
 
 public class ProfileReader(
@@ -24,13 +26,11 @@ public class ProfileReader(
     {
         var currentUserName = currentUserAccessor.GetCurrentUsername();
 
-        var person = await context
-            .Persons.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
-        if (person is null)
-        {
-            throw new RestException(HttpStatusCode.NotFound, new { User = Constants.NOT_FOUND });
-        }
+        var person =
+            await context
+                .Persons.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Username == username, cancellationToken)
+            ?? throw new RestException(HttpStatusCode.NotFound, new { Constants.NOT_FOUND });
 
         var profile = mapper.Map<Domain.Person, Profile>(person);
 

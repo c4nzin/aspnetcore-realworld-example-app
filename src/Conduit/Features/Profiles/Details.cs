@@ -5,6 +5,7 @@ using MediatR;
 
 namespace Conduit.Features.Profiles;
 
+//ok
 public class Details
 {
     public record Query(string Username) : IRequest<ProfileEnvelope>;

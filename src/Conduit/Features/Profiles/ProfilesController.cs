@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Conduit.Features.Profiles;
 
+//ok
+
 [Route("profiles")]
 public class ProfilesController(IMediator mediator) : Controller
 {
